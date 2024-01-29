@@ -33,11 +33,12 @@
 
 #include "urg_node/urg_node_driver.h"
 
-#include <tf/tf.h>  // tf header for resolving tf prefix
-#include <string>
 #include <diagnostic_msgs/AddDiagnostics.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
+#include <tf/tf.h>  // tf header for resolving tf prefix
 #include <urg_node/Status.h>
+#include <exception>
+#include <string>
 
 namespace urg_node
 {
@@ -611,6 +612,11 @@ void UrgNode::scanThread()
             error_count_++;
           }
         }
+      }
+      catch (std::exception& e)
+      {
+        ROS_ERROR("Error grabbing Hokuyo scan: %s", e.what());
+        error_count_++;
       }
       catch (...)
       {
